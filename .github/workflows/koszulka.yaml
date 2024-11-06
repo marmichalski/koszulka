@@ -1,0 +1,13 @@
+name: Koszulka
+
+on:
+  pull_request:
+
+jobs:
+  koszulka:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Koszulka
+        uses: marmichalski/koszulka@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,57 @@
+name: "Koszulka"
+description: "A GitHub Action that assigns a t-shirt sized label to your pull request based on the size of it"
+branding:
+  icon: git-merge
+  color: orange
+inputs:
+  token:
+    description: "GitHub token to use to interact with the GitHub API."
+    required: true
+  name:
+    description: "The name of the check run."
+    required: false
+    default: "koszulka"
+  ignoreLineDeletions:
+    description: "Whether to ignore line deletions."
+    required: false
+    default: false
+  ignoreFileRemovals:
+    description: "Whether to ignore complete file removals."
+    required: false
+    default: false
+  ignoreFiles:
+    description: "A multi-line list of file names to ignore, matching by minimatch."
+    required: false
+    default: ""
+  labels:
+    description: "A multi-line list of labels."
+    required: false
+    default: |
+      size/xs
+      size/s
+      size/m
+      size/l
+      size/xl
+  labelsSizes:
+    description: "A multi-line list of max changes (additions + deletions) per label. Size must be one less than labels, when the last size is exceeded, the last label will be used."
+    default: |
+      10
+      100
+      500
+      1000
+  commentOnLastSize:
+    description: "Should a comment be made when pull request is the biggest size."
+    required: false
+    default: false
+  commentContentOnLastSize:
+    description: "Comment content when pull request is the biggest size."
+    required: false
+    default: >
+      This PR is quite large. Please make sure it focuses on a single issue, as it may be rejected because of its size.
+  failOnLastSize:
+    description: "Should the check run be failed when pull request is the biggest size."
+    required: false
+    default: false
+runs:
+  using: node20
+  main: dist/index.js
