@@ -30216,45 +30216,50 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.calculateDiff = void 0;
+exports.calculateDiff = exports.sumFiles = void 0;
 const github = __importStar(__nccwpck_require__(3228));
 const inputs_1 = __nccwpck_require__(8422);
 const minimatch_1 = __nccwpck_require__(6507);
 const diff_1 = __nccwpck_require__(9952);
 const octokit = github.getOctokit(inputs_1.inputs.token);
+const sumFiles = (files, options) => {
+    let additions = 0;
+    let deletions = 0;
+    for (const file of files) {
+        if (options.ignoreFileRemovals && file.status === "removed") {
+            continue;
+        }
+        if ([...options.ignoreFiles].some((ignored) => (0, minimatch_1.minimatch)(file.filename, ignored))) {
+            continue;
+        }
+        additions += file.additions;
+        deletions += options.ignoreLineDeletions ? 0 : file.deletions;
+    }
+    return new diff_1.Diff(additions, deletions);
+};
+exports.sumFiles = sumFiles;
 const calculateDiff = async () => {
     if (!github.context.payload.pull_request?.number) {
         throw Error("Pull request not found in github context!");
     }
-    if (inputs_1.inputs.ignoreFiles.size === 0 && inputs_1.inputs.ignoreFileRemovals) {
+    // The pull request totals include all files, so use them only when no file is ignored.
+    if (inputs_1.inputs.ignoreFiles.size === 0 && !inputs_1.inputs.ignoreFileRemovals) {
         const { data } = await octokit.rest.pulls.get({
             ...github.context.repo,
             pull_number: github.context.payload.pull_request.number,
         });
-        return new diff_1.Diff(data.additions, data.deletions);
+        return new diff_1.Diff(data.additions, inputs_1.inputs.ignoreLineDeletions ? 0 : data.deletions);
     }
     const iterator = octokit.paginate.iterator(octokit.rest.pulls.listFiles, {
         ...github.context.repo,
         pull_number: github.context.payload.pull_request.number,
         per_page: 100,
     });
-    const result = {
-        additions: 0,
-        deletions: 0,
-    };
-    for await (const { data: files } of iterator) {
-        files.reduce((sum, file) => {
-            for (const ignored of inputs_1.inputs.ignoreFiles) {
-                if ((0, minimatch_1.minimatch)(file.filename, ignored)) {
-                    return sum;
-                }
-            }
-            sum.additions += file.additions;
-            sum.deletions += file.deletions;
-            return sum;
-        }, result);
+    const files = [];
+    for await (const { data } of iterator) {
+        files.push(...data);
     }
-    return new diff_1.Diff(result.additions, result.deletions);
+    return (0, exports.sumFiles)(files, inputs_1.inputs);
 };
 exports.calculateDiff = calculateDiff;
 
@@ -30579,10 +30584,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.updateLabels = void 0;
+exports.updateLabels = exports.pickLabel = void 0;
 const github = __importStar(__nccwpck_require__(3228));
 const inputs_1 = __nccwpck_require__(8422);
 const octokit = github.getOctokit(inputs_1.inputs.token);
+const pickLabel = (total, labels, sizes) => {
+    for (const [idx, size] of sizes.entries()) {
+        if (total <= size) {
+            return labels[idx];
+        }
+    }
+    return labels[sizes.length];
+};
+exports.pickLabel = pickLabel;
 const updateLabels = async (diff) => {
     if (!github.context.payload.pull_request?.number) {
         throw Error("Pull request not found in github context!");
@@ -30594,14 +30608,7 @@ const updateLabels = async (diff) => {
         .map((label) => (typeof label === "string" ? label : label.name))
         .filter((label) => label !== undefined);
     const currentSizeLabels = currentLabels.filter((label) => inputs_1.inputs.labels.includes(label));
-    let newSizeLabel = inputs_1.inputs.labels[0];
-    for (const [idx, size] of inputs_1.inputs.labelsSizes.entries()) {
-        newSizeLabel = inputs_1.inputs.labels[idx];
-        if (diff.total() <= size) {
-            break;
-        }
-        newSizeLabel = inputs_1.inputs.labels[idx + 1];
-    }
+    const newSizeLabel = (0, exports.pickLabel)(diff.total(), inputs_1.inputs.labels, inputs_1.inputs.labelsSizes);
     if (currentSizeLabels.length === 1 && currentSizeLabels[0] === newSizeLabel) {
         return newSizeLabel;
     }

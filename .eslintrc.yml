@@ -37,6 +37,7 @@ rules:
     'import/no-namespace': 'off',
     'no-console': 'off',
     'i18n-text/no-en': 'off',
+    'import/no-unresolved': ['error', { 'ignore': ['^vitest/config$'] }],
     'no-constant-condition': 'off',
     '@typescript-eslint/array-type': 'error',
     '@typescript-eslint/await-thenable': 'error',
