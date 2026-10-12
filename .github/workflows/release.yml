@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release tag to move the major tag to, for example v1.2.3.
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  major-tag:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Move the major tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+        run: |
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::The tag $TAG is not a vX.Y.Z version."
+            exit 1
+          fi
+
+          major="${TAG%%.*}"
+          sha="$(gh api "repos/$REPO/commits/$TAG" --jq .sha)"
+
+          if gh api "repos/$REPO/git/ref/tags/$major" --silent 2>/dev/null; then
+            gh api --method PATCH "repos/$REPO/git/refs/tags/$major" -f sha="$sha" -F force=true --silent
+          else
+            gh api --method POST "repos/$REPO/git/refs" -f ref="refs/tags/$major" -f sha="$sha" --silent
+          fi
+
+          echo "Moved $major to $TAG ($sha)."
