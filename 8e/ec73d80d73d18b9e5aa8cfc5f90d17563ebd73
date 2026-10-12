@@ -1,0 +1,21 @@
+src/calculate-diff.test.ts
+  s_0120e3b8157a6f::t_c861a8360ce3da 1-25,34-39,42,50,60,66-136
+src/calculate-diff.ts
+  s_0120e3b8157a6f::t_35c2ee303d93b9 15-21,26-34,39,50-51,57-60,74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8eec73d80d73d18b9e5aa8cfc5f90d17563ebd73",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
