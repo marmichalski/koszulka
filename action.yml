@@ -20,7 +20,7 @@ inputs:
     required: false
     default: false
   ignoreFiles:
-    description: "A multi-line list of file names to ignore, matching by minimatch."
+    description: "A multi-line list of file names to ignore, matching by minimatch. The patterns also match dotfiles and files in dot folders."
     required: false
     default: ""
   labels:

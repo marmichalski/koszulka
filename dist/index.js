@@ -30229,7 +30229,7 @@ const sumFiles = (files, options) => {
         if (options.ignoreFileRemovals && file.status === "removed") {
             continue;
         }
-        if ([...options.ignoreFiles].some((ignored) => (0, minimatch_1.minimatch)(file.filename, ignored))) {
+        if ([...options.ignoreFiles].some((ignored) => (0, minimatch_1.minimatch)(file.filename, ignored, { dot: true }))) {
             continue;
         }
         additions += file.additions;

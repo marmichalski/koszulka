@@ -29,7 +29,7 @@ export const sumFiles = (files: FileChange[], options: DiffOptions): Diff => {
 
     if (
       [...options.ignoreFiles].some((ignored) =>
-        minimatch(file.filename, ignored),
+        minimatch(file.filename, ignored, { dot: true }),
       )
     ) {
       continue;
