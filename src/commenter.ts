@@ -1,5 +1,5 @@
 import * as github from "@actions/github";
-import { inputs } from "./inputs";
+import { inputs } from "./inputs.js";
 
 const octokit = github.getOctokit(inputs.token);
 

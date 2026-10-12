@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { FileChange, calculateDiff, sumFiles } from "./calculate-diff";
+import { FileChange, calculateDiff, sumFiles } from "./calculate-diff.js";
 
 const { octokit, inputs } = vi.hoisted(() => ({
   octokit: {
@@ -22,7 +22,7 @@ vi.mock("@actions/github", () => ({
   },
 }));
 
-vi.mock("./inputs", () => ({ inputs }));
+vi.mock("./inputs.js", () => ({ inputs }));
 
 const file = (
   filename: string,

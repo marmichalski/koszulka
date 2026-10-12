@@ -1,7 +1,7 @@
 import * as github from "@actions/github";
-import { inputs } from "./inputs";
+import { inputs } from "./inputs.js";
 import { minimatch } from "minimatch";
-import { Diff } from "./diff";
+import { Diff } from "./diff.js";
 
 const octokit = github.getOctokit(inputs.token);
 

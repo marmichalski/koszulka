@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { comment } from "./commenter";
+import { comment } from "./commenter.js";
 
 const { octokit, inputs } = vi.hoisted(() => ({
   octokit: {
@@ -29,7 +29,7 @@ vi.mock("@actions/github", () => ({
   },
 }));
 
-vi.mock("./inputs", () => ({ inputs }));
+vi.mock("./inputs.js", () => ({ inputs }));
 
 const marker = "<!-- koszulka:koszulka -->";
 const body = `${marker}\nThis PR is quite large.`;

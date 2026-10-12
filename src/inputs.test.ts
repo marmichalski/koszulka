@@ -1,18 +1,27 @@
 import * as core from "@actions/core";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@actions/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@actions/core")>()),
+  warning: vi.fn(),
+}));
 
 const loadInputs = async (
   labels: string,
   labelsSizes: string,
-): Promise<typeof import("./inputs")> => {
+): Promise<typeof import("./inputs.js")> => {
   vi.stubEnv("INPUT_LABELS", labels);
   vi.stubEnv("INPUT_LABELSSIZES", labelsSizes);
   vi.resetModules();
 
-  return vi.importActual("./inputs");
+  return vi.importActual("./inputs.js");
 };
 
 describe("validateInputs", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("accepts the default inputs", async () => {
     const { validateInputs } = await loadInputs(
       "xs\ns\nm\nl\nxl",
@@ -87,25 +96,23 @@ describe("validateInputs", () => {
   });
 
   it("warns when comment content is empty but commenting is enabled", async () => {
-    const warning = vi.spyOn(core, "warning").mockImplementation(() => {});
     vi.stubEnv("INPUT_COMMENTONLASTSIZE", "true");
     vi.stubEnv("INPUT_COMMENTCONTENTONLASTSIZE", "  ");
     const { validateInputs } = await loadInputs("xs\ns", "10");
 
     validateInputs();
 
-    expect(warning).toHaveBeenCalledWith(
+    expect(core.warning).toHaveBeenCalledWith(
       "commentOnLastSize is true, but commentContentOnLastSize is empty, so no comment will be posted.",
     );
   });
 
   it("does not warn when commenting is disabled", async () => {
-    const warning = vi.spyOn(core, "warning").mockImplementation(() => {});
     vi.stubEnv("INPUT_COMMENTCONTENTONLASTSIZE", "");
     const { validateInputs } = await loadInputs("xs\ns", "10");
 
     validateInputs();
 
-    expect(warning).not.toHaveBeenCalled();
+    expect(core.warning).not.toHaveBeenCalled();
   });
 });

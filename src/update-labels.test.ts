@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pickLabel } from "./update-labels";
+import { pickLabel } from "./update-labels.js";
 
 const labels = ["size/xs", "size/s", "size/m", "size/l", "size/xl"];
 const sizes = [10, 100, 500, 1000];
