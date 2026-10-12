@@ -30294,20 +30294,49 @@ exports.comment = void 0;
 const github = __importStar(__nccwpck_require__(3228));
 const inputs_1 = __nccwpck_require__(8422);
 const octokit = github.getOctokit(inputs_1.inputs.token);
-const comment = async () => {
+// Hidden marker to find the comment of this action in later runs.
+const marker = `<!-- koszulka:${inputs_1.inputs.name} -->`;
+const findComment = async (issueNumber) => {
+    const comments = await octokit.paginate(octokit.rest.issues.listComments, {
+        ...github.context.repo,
+        issue_number: issueNumber,
+        per_page: 100,
+    });
+    return comments.find((comment) => comment.body?.includes(marker));
+};
+const comment = async (isLastSize) => {
     if (!github.context.payload.pull_request?.number) {
         throw Error("Pull request not found in github context!");
     }
     if (!inputs_1.inputs.commentOnLastSize) {
         return;
     }
-    if (inputs_1.inputs.commentContentOnLastSize.trim() === "") {
+    const issueNumber = github.context.payload.pull_request.number;
+    const existing = await findComment(issueNumber);
+    if (!isLastSize || inputs_1.inputs.commentContentOnLastSize.trim() === "") {
+        if (existing) {
+            await octokit.rest.issues.deleteComment({
+                ...github.context.repo,
+                comment_id: existing.id,
+            });
+        }
         return;
     }
-    octokit.rest.issues.createComment({
+    const body = `${marker}\n${inputs_1.inputs.commentContentOnLastSize}`;
+    if (existing) {
+        if (existing.body !== body) {
+            await octokit.rest.issues.updateComment({
+                ...github.context.repo,
+                comment_id: existing.id,
+                body,
+            });
+        }
+        return;
+    }
+    await octokit.rest.issues.createComment({
         ...github.context.repo,
-        issue_number: github.context.payload.pull_request.number,
-        body: inputs_1.inputs.commentContentOnLastSize,
+        issue_number: issueNumber,
+        body,
     });
 };
 exports.comment = comment;
@@ -30420,11 +30449,10 @@ const run = async () => {
         display_1.Display.diffSummary(diff);
         const assignedLabel = await (0, update_labels_1.updateLabels)(diff);
         display_1.Display.assignedLabel(assignedLabel);
-        if (inputs_1.inputs.labels.slice(-1).includes(assignedLabel)) {
-            (0, commenter_1.comment)();
-            if (inputs_1.inputs.failOnLastSize) {
-                core.setFailed("Failed job due to PR size being too big.");
-            }
+        const isLastSize = inputs_1.inputs.labels.slice(-1).includes(assignedLabel);
+        await (0, commenter_1.comment)(isLastSize);
+        if (isLastSize && inputs_1.inputs.failOnLastSize) {
+            core.setFailed("Failed job due to PR size being too big.");
         }
     }
     catch (error) {
@@ -30547,7 +30575,7 @@ const updateLabels = async (diff) => {
     if (currentSizeLabels.length === 1 && currentSizeLabels[0] === newSizeLabel) {
         return newSizeLabel;
     }
-    octokit.rest.issues.setLabels({
+    await octokit.rest.issues.setLabels({
         ...github.context.repo,
         issue_number: github.context.payload.pull_request.number,
         labels: currentLabels
