@@ -8,7 +8,7 @@ inputs:
     description: "GitHub token to use to interact with the GitHub API."
     required: true
   name:
-    description: "A unique name for this action in the workflow. The action uses it to find its own pull request comment, so use a different name for each Koszulka step that comments on the same pull request."
+    description: "The name the action uses to find its own pull request comment when it runs again."
     required: false
     default: "koszulka"
   ignoreLineDeletions:
