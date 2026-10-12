@@ -1,0 +1,43 @@
+.eslintrc.yml
+  s_0120e3b8157a6f::t_be5b388fb7f579 40
+.github/workflows/test.yml
+  s_0120e3b8157a6f::t_10d6e5b0b9fea5 1-27
+package-lock.json
+  s_0120e3b8157a6f::t_83aac9a9d3c1fc 24-25,225-252,432-442,455-750,757-781,1013-1050,1250-1259,1409-1418,1592-1602,1720-1726,2348-2357,2367-2376,2513-2528,3253-3256,3258-3259,3261,3264,3267-3290,3292-3297,3299-3303,3306-3602,3644-3663,3764-3777,3914-3943,4079-4113,4264-4281,4430-4497,4735-4923,4974-4986
+package.json
+  s_0120e3b8157a6f::t_c86bce6fab946e 15-16,31-32
+src/calculate-diff.test.ts
+  s_0120e3b8157a6f::t_40734571193b4b 1-37
+src/calculate-diff.ts
+  s_0120e3b8157a6f::t_81c81d7bf5143a 8-33,54-56,59
+src/commenter.test.ts
+  s_0120e3b8157a6f::t_c6c33db52009d9 1-128
+src/inputs.test.ts
+  s_0120e3b8157a6f::t_ff2322450bc51b 1-87
+src/update-labels.test.ts
+  s_0120e3b8157a6f::t_1ae08b801b43d5 1-26
+src/update-labels.ts
+  s_0120e3b8157a6f::t_eab727ef4c095f 7-20,38-42
+tsconfig.json
+  s_0120e3b8157a6f::t_58fbdc505dd821 17
+vitest.config.mts
+  s_0120e3b8157a6f::t_dee5340899754b 1-9
+vitest.setup.ts
+  s_0120e3b8157a6f::t_e9c89e7c9f2bc7 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16034c22b871f783a0b634635b83b2657333ae5b",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
