@@ -64,6 +64,19 @@ describe("sumFiles", () => {
     expect(diff.deletions).toBe(2);
   });
 
+  it("ignores files in dot folders that match a pattern", () => {
+    const diff = sumFiles(
+      [
+        file("src/a.ts", 10, 2),
+        file(".yarn/cache/x.lock", 500, 400),
+        file(".github/workflows/ci.yml", 5, 1),
+      ],
+      { ...noOptions, ignoreFiles: new Set(["**/*.lock", "**/*.yml"]) },
+    );
+
+    expect(diff.total()).toBe(12);
+  });
+
   it("ignores removed files when ignoreFileRemovals is set", () => {
     const files = [file("a.ts", 10, 2), file("old.ts", 0, 300, "removed")];
 
