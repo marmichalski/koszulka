@@ -52,6 +52,17 @@ inputs:
     description: "Should the check run be failed when pull request is the biggest size."
     required: false
     default: false
+outputs:
+  label:
+    description: "The size label assigned to the pull request."
+  additions:
+    description: "The number of added lines that were counted."
+  deletions:
+    description: "The number of deleted lines that were counted. It is 0 when ignoreLineDeletions is true."
+  total:
+    description: "The number of changes (additions + deletions) used to select the label."
+  isLastSize:
+    description: 'Whether the pull request is the biggest size, as a string "true" or "false".'
 runs:
   using: node24
   main: dist/index.js
