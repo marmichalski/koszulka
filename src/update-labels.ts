@@ -4,6 +4,20 @@ import { Diff } from "./diff";
 
 const octokit = github.getOctokit(inputs.token);
 
+export const pickLabel = (
+  total: number,
+  labels: string[],
+  sizes: number[],
+): string => {
+  for (const [idx, size] of sizes.entries()) {
+    if (total <= size) {
+      return labels[idx];
+    }
+  }
+
+  return labels[sizes.length];
+};
+
 export const updateLabels = async (diff: Diff): Promise<string> => {
   if (!github.context.payload.pull_request?.number) {
     throw Error("Pull request not found in github context!");
@@ -21,16 +35,11 @@ export const updateLabels = async (diff: Diff): Promise<string> => {
     inputs.labels.includes(label),
   );
 
-  let newSizeLabel = inputs.labels[0];
-  for (const [idx, size] of inputs.labelsSizes.entries()) {
-    newSizeLabel = inputs.labels[idx];
-
-    if (diff.total() <= size) {
-      break;
-    }
-
-    newSizeLabel = inputs.labels[idx + 1];
-  }
+  const newSizeLabel = pickLabel(
+    diff.total(),
+    inputs.labels,
+    inputs.labelsSizes,
+  );
 
   if (currentSizeLabels.length === 1 && currentSizeLabels[0] === newSizeLabel) {
     return newSizeLabel;

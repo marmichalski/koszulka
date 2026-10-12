@@ -5,6 +5,32 @@ import { Diff } from "./diff";
 
 const octokit = github.getOctokit(inputs.token);
 
+export interface FileChange {
+  filename: string;
+  status: string;
+  additions: number;
+  deletions: number;
+}
+
+export const sumFiles = (
+  files: FileChange[],
+  ignoreFiles: Set<string>,
+): Diff => {
+  let additions = 0;
+  let deletions = 0;
+
+  for (const file of files) {
+    if ([...ignoreFiles].some((ignored) => minimatch(file.filename, ignored))) {
+      continue;
+    }
+
+    additions += file.additions;
+    deletions += file.deletions;
+  }
+
+  return new Diff(additions, deletions);
+};
+
 export const calculateDiff = async (): Promise<Diff> => {
   if (!github.context.payload.pull_request?.number) {
     throw Error("Pull request not found in github context!");
@@ -25,25 +51,10 @@ export const calculateDiff = async (): Promise<Diff> => {
     per_page: 100,
   });
 
-  const result = {
-    additions: 0,
-    deletions: 0,
-  };
-
-  for await (const { data: files } of iterator) {
-    files.reduce((sum, file) => {
-      for (const ignored of inputs.ignoreFiles) {
-        if (minimatch(file.filename, ignored)) {
-          return sum;
-        }
-      }
-
-      sum.additions += file.additions;
-      sum.deletions += file.deletions;
-
-      return sum;
-    }, result);
+  const files: FileChange[] = [];
+  for await (const { data } of iterator) {
+    files.push(...data);
   }
 
-  return new Diff(result.additions, result.deletions);
+  return sumFiles(files, inputs.ignoreFiles);
 };

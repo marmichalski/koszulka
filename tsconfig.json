@@ -3,7 +3,6 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
-    "rootDir": "./src",
     "moduleResolution": "NodeNext",
     "baseUrl": "./",
     "sourceMap": true,
@@ -15,5 +14,6 @@
     "skipLibCheck": true,
     "newLine": "lf"
   },
+  "include": ["src", "vitest.config.mts", "vitest.setup.ts"],
   "exclude": ["./dist", "./node_modules"]
 }
