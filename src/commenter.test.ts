@@ -15,7 +15,6 @@ const { octokit, inputs } = vi.hoisted(() => ({
   },
   inputs: {
     token: "token",
-    name: "koszulka",
     commentOnLastSize: true,
     commentContentOnLastSize: "This PR is quite large.",
   },
@@ -31,7 +30,7 @@ vi.mock("@actions/github", () => ({
 
 vi.mock("./inputs.js", () => ({ inputs }));
 
-const marker = "<!-- koszulka:koszulka -->";
+const marker = "<!-- koszulka -->";
 const body = `${marker}\nThis PR is quite large.`;
 const repo = { owner: "owner", repo: "repo" };
 
@@ -77,17 +76,6 @@ describe("comment", () => {
       body,
     });
     expect(octokit.rest.issues.createComment).not.toHaveBeenCalled();
-  });
-
-  it("does not use the comment of an action with a different name", async () => {
-    octokit.paginate.mockResolvedValue([
-      { id: 1, body: "<!-- koszulka:other -->\nThis PR is quite large." },
-    ]);
-
-    await comment(true);
-
-    expect(octokit.rest.issues.createComment).toHaveBeenCalledOnce();
-    expect(octokit.rest.issues.updateComment).not.toHaveBeenCalled();
   });
 
   it("deletes the comment when the PR is no longer the last size", async () => {

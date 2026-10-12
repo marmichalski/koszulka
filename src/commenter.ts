@@ -4,7 +4,7 @@ import { inputs } from "./inputs.js";
 const octokit = github.getOctokit(inputs.token);
 
 // Hidden marker to find the comment of this action in later runs.
-const marker = `<!-- koszulka:${inputs.name} -->`;
+const marker = "<!-- koszulka -->";
 
 type Comment = Awaited<
   ReturnType<typeof octokit.rest.issues.listComments>
