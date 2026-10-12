@@ -1,9 +1,9 @@
 import * as core from "@actions/core";
-import { calculateDiff } from "./calculate-diff";
-import { Display } from "./display";
-import { updateLabels } from "./update-labels";
-import { inputs, validateInputs } from "./inputs";
-import { comment } from "./commenter";
+import { calculateDiff } from "./calculate-diff.js";
+import { Display } from "./display.js";
+import { updateLabels } from "./update-labels.js";
+import { inputs, validateInputs } from "./inputs.js";
+import { comment } from "./commenter.js";
 
 export const run = async (): Promise<void> => {
   try {

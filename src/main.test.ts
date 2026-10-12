@@ -1,20 +1,20 @@
 import * as core from "@actions/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Diff } from "./diff";
-import { run } from "./main";
-import { calculateDiff } from "./calculate-diff";
-import { updateLabels } from "./update-labels";
-import { comment } from "./commenter";
+import { Diff } from "./diff.js";
+import { run } from "./main.js";
+import { calculateDiff } from "./calculate-diff.js";
+import { updateLabels } from "./update-labels.js";
+import { comment } from "./commenter.js";
 
 vi.mock("@actions/core", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@actions/core")>()),
   setOutput: vi.fn(),
   setFailed: vi.fn(),
 }));
-vi.mock("./calculate-diff", () => ({ calculateDiff: vi.fn() }));
-vi.mock("./update-labels", () => ({ updateLabels: vi.fn() }));
-vi.mock("./commenter", () => ({ comment: vi.fn() }));
-vi.mock("./display", () => ({
+vi.mock("./calculate-diff.js", () => ({ calculateDiff: vi.fn() }));
+vi.mock("./update-labels.js", () => ({ updateLabels: vi.fn() }));
+vi.mock("./commenter.js", () => ({ comment: vi.fn() }));
+vi.mock("./display.js", () => ({
   Display: { inputs: vi.fn(), diffSummary: vi.fn(), assignedLabel: vi.fn() },
 }));
 

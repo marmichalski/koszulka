@@ -1,5 +1,5 @@
-import { Diff } from "./diff";
-import { inputs } from "./inputs";
+import { Diff } from "./diff.js";
+import { inputs } from "./inputs.js";
 
 const colors = {
   reset: "\x1b[0m",
