@@ -36,7 +36,7 @@ export const updateLabels = async (diff: Diff): Promise<string> => {
     return newSizeLabel;
   }
 
-  octokit.rest.issues.setLabels({
+  await octokit.rest.issues.setLabels({
     ...github.context.repo,
     issue_number: github.context.payload.pull_request.number,
     labels: currentLabels
