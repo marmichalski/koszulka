@@ -30222,15 +30222,18 @@ const inputs_1 = __nccwpck_require__(8422);
 const minimatch_1 = __nccwpck_require__(6507);
 const diff_1 = __nccwpck_require__(9952);
 const octokit = github.getOctokit(inputs_1.inputs.token);
-const sumFiles = (files, ignoreFiles) => {
+const sumFiles = (files, options) => {
     let additions = 0;
     let deletions = 0;
     for (const file of files) {
-        if ([...ignoreFiles].some((ignored) => (0, minimatch_1.minimatch)(file.filename, ignored))) {
+        if (options.ignoreFileRemovals && file.status === "removed") {
+            continue;
+        }
+        if ([...options.ignoreFiles].some((ignored) => (0, minimatch_1.minimatch)(file.filename, ignored))) {
             continue;
         }
         additions += file.additions;
-        deletions += file.deletions;
+        deletions += options.ignoreLineDeletions ? 0 : file.deletions;
     }
     return new diff_1.Diff(additions, deletions);
 };
@@ -30239,12 +30242,13 @@ const calculateDiff = async () => {
     if (!github.context.payload.pull_request?.number) {
         throw Error("Pull request not found in github context!");
     }
-    if (inputs_1.inputs.ignoreFiles.size === 0 && inputs_1.inputs.ignoreFileRemovals) {
+    // The pull request totals include all files, so use them only when no file is ignored.
+    if (inputs_1.inputs.ignoreFiles.size === 0 && !inputs_1.inputs.ignoreFileRemovals) {
         const { data } = await octokit.rest.pulls.get({
             ...github.context.repo,
             pull_number: github.context.payload.pull_request.number,
         });
-        return new diff_1.Diff(data.additions, data.deletions);
+        return new diff_1.Diff(data.additions, inputs_1.inputs.ignoreLineDeletions ? 0 : data.deletions);
     }
     const iterator = octokit.paginate.iterator(octokit.rest.pulls.listFiles, {
         ...github.context.repo,
@@ -30255,7 +30259,7 @@ const calculateDiff = async () => {
     for await (const { data } of iterator) {
         files.push(...data);
     }
-    return (0, exports.sumFiles)(files, inputs_1.inputs.ignoreFiles);
+    return (0, exports.sumFiles)(files, inputs_1.inputs);
 };
 exports.calculateDiff = calculateDiff;
 

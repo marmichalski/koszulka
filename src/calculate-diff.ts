@@ -12,20 +12,31 @@ export interface FileChange {
   deletions: number;
 }
 
-export const sumFiles = (
-  files: FileChange[],
-  ignoreFiles: Set<string>,
-): Diff => {
+export interface DiffOptions {
+  ignoreFiles: Set<string>;
+  ignoreFileRemovals: boolean;
+  ignoreLineDeletions: boolean;
+}
+
+export const sumFiles = (files: FileChange[], options: DiffOptions): Diff => {
   let additions = 0;
   let deletions = 0;
 
   for (const file of files) {
-    if ([...ignoreFiles].some((ignored) => minimatch(file.filename, ignored))) {
+    if (options.ignoreFileRemovals && file.status === "removed") {
+      continue;
+    }
+
+    if (
+      [...options.ignoreFiles].some((ignored) =>
+        minimatch(file.filename, ignored),
+      )
+    ) {
       continue;
     }
 
     additions += file.additions;
-    deletions += file.deletions;
+    deletions += options.ignoreLineDeletions ? 0 : file.deletions;
   }
 
   return new Diff(additions, deletions);
@@ -36,13 +47,17 @@ export const calculateDiff = async (): Promise<Diff> => {
     throw Error("Pull request not found in github context!");
   }
 
-  if (inputs.ignoreFiles.size === 0 && inputs.ignoreFileRemovals) {
+  // The pull request totals include all files, so use them only when no file is ignored.
+  if (inputs.ignoreFiles.size === 0 && !inputs.ignoreFileRemovals) {
     const { data } = await octokit.rest.pulls.get({
       ...github.context.repo,
       pull_number: github.context.payload.pull_request.number,
     });
 
-    return new Diff(data.additions, data.deletions);
+    return new Diff(
+      data.additions,
+      inputs.ignoreLineDeletions ? 0 : data.deletions,
+    );
   }
 
   const iterator = octokit.paginate.iterator(octokit.rest.pulls.listFiles, {
@@ -56,5 +71,5 @@ export const calculateDiff = async (): Promise<Diff> => {
     files.push(...data);
   }
 
-  return sumFiles(files, inputs.ignoreFiles);
+  return sumFiles(files, inputs);
 };
