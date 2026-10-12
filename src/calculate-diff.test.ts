@@ -109,9 +109,7 @@ describe("calculateDiff", () => {
     octokit.rest.pulls.get.mockResolvedValue({
       data: { additions: 10, deletions: 302 },
     });
-    octokit.paginate.iterator.mockImplementation(async function* () {
-      yield { data: files };
-    });
+    octokit.paginate.iterator.mockReturnValue([{ data: files }]);
   });
 
   it("uses the pull request totals when no file filter is set", async () => {
