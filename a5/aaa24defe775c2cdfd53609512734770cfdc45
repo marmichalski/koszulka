@@ -1,0 +1,19 @@
+README.md
+  s_0120e3b8157a6f::t_55d3e5c36ad8e4 2-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5aaa24defe775c2cdfd53609512734770cfdc45",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
