@@ -30445,6 +30445,7 @@ const commenter_1 = __nccwpck_require__(2069);
 const run = async () => {
     try {
         display_1.Display.inputs();
+        (0, inputs_1.validateInputs)();
         const diff = await (0, calculate_diff_1.calculateDiff)();
         display_1.Display.diffSummary(diff);
         const assignedLabel = await (0, update_labels_1.updateLabels)(diff);
@@ -30499,8 +30500,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.inputs = void 0;
+exports.validateInputs = exports.inputs = void 0;
 const core = __importStar(__nccwpck_require__(7484));
+const labelsSizesRaw = core.getMultilineInput("labelsSizes");
 exports.inputs = {
     token: core.getInput("token", { required: true }),
     name: core.getInput("name"),
@@ -30508,14 +30510,42 @@ exports.inputs = {
     ignoreFileRemovals: core.getBooleanInput("ignoreFileRemovals"),
     ignoreFiles: new Set(core.getMultilineInput("ignoreFiles")),
     labels: core.getMultilineInput("labels"),
-    labelsSizes: core
-        .getMultilineInput("labelsSizes")
+    labelsSizes: labelsSizesRaw
         .map((size) => Number(size).valueOf())
         .sort((a, b) => a - b),
     commentOnLastSize: core.getBooleanInput("commentOnLastSize"),
     commentContentOnLastSize: core.getInput("commentContentOnLastSize"),
     failOnLastSize: core.getBooleanInput("failOnLastSize"),
 };
+const duplicates = (values) => [
+    ...new Set(values.filter((value, idx) => values.indexOf(value) !== idx)),
+];
+const validateInputs = () => {
+    const errors = [];
+    if (exports.inputs.labels.length === 0) {
+        errors.push("labels must contain at least one label.");
+    }
+    const duplicatedLabels = duplicates(exports.inputs.labels);
+    if (duplicatedLabels.length > 0) {
+        errors.push(`labels contain duplicates: ${duplicatedLabels.join(", ")}.`);
+    }
+    const invalidSizes = labelsSizesRaw.filter((size) => !/^\d+$/.test(size));
+    if (invalidSizes.length > 0) {
+        errors.push(`labelsSizes must contain only non-negative integers, got: ${invalidSizes.join(", ")}.`);
+    }
+    const duplicatedSizes = duplicates(exports.inputs.labelsSizes.filter((size) => Number.isInteger(size)));
+    if (duplicatedSizes.length > 0) {
+        errors.push(`labelsSizes contain duplicates: ${duplicatedSizes.join(", ")}.`);
+    }
+    if (exports.inputs.labels.length > 0 &&
+        exports.inputs.labelsSizes.length !== exports.inputs.labels.length - 1) {
+        errors.push(`labelsSizes must contain one value less than labels, got ${exports.inputs.labelsSizes.length} sizes for ${exports.inputs.labels.length} labels.`);
+    }
+    if (errors.length > 0) {
+        throw Error(`Invalid inputs:\n- ${errors.join("\n- ")}`);
+    }
+};
+exports.validateInputs = validateInputs;
 
 
 /***/ }),
