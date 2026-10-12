@@ -3,6 +3,9 @@ name: Koszulka
 on:
   pull_request:
 
+permissions:
+  pull-requests: write
+
 jobs:
   koszulka:
     runs-on: ubuntu-22.04
