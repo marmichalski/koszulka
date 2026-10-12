@@ -2,12 +2,13 @@ import * as core from "@actions/core";
 import { calculateDiff } from "./calculate-diff";
 import { Display } from "./display";
 import { updateLabels } from "./update-labels";
-import { inputs } from "./inputs";
+import { inputs, validateInputs } from "./inputs";
 import { comment } from "./commenter";
 
 const run = async (): Promise<void> => {
   try {
     Display.inputs();
+    validateInputs();
 
     const diff = await calculateDiff();
     Display.diffSummary(diff);

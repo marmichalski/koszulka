@@ -33,7 +33,7 @@ inputs:
       size/l
       size/xl
   labelsSizes:
-    description: "A multi-line list of max changes (additions + deletions) per label. Size must be one less than labels, when the last size is exceeded, the last label will be used."
+    description: "A multi-line list of max changes (additions + deletions) per label. The number of sizes must be one less than the number of labels. When the last size is exceeded, the last label will be used."
     default: |
       10
       100
