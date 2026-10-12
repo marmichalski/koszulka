@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 import { describe, expect, it, vi } from "vitest";
 
 const loadInputs = async (
@@ -83,5 +84,28 @@ describe("validateInputs", () => {
         "- labelsSizes must contain one value less than labels, got 3 sizes for 2 labels.",
       ].join("\n"),
     );
+  });
+
+  it("warns when comment content is empty but commenting is enabled", async () => {
+    const warning = vi.spyOn(core, "warning").mockImplementation(() => {});
+    vi.stubEnv("INPUT_COMMENTONLASTSIZE", "true");
+    vi.stubEnv("INPUT_COMMENTCONTENTONLASTSIZE", "  ");
+    const { validateInputs } = await loadInputs("xs\ns", "10");
+
+    validateInputs();
+
+    expect(warning).toHaveBeenCalledWith(
+      "commentOnLastSize is true, but commentContentOnLastSize is empty, so no comment will be posted.",
+    );
+  });
+
+  it("does not warn when commenting is disabled", async () => {
+    const warning = vi.spyOn(core, "warning").mockImplementation(() => {});
+    vi.stubEnv("INPUT_COMMENTCONTENTONLASTSIZE", "");
+    const { validateInputs } = await loadInputs("xs\ns", "10");
+
+    validateInputs();
+
+    expect(warning).not.toHaveBeenCalled();
   });
 });
