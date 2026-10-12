@@ -1,39 +1,40 @@
 name: Release
 
 on:
-  release:
-    types: [released]
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: The release tag to move the major tag to, for example v1.2.3.
-        required: true
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: release
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  major-tag:
+  release:
     runs-on: ubuntu-slim
     steps:
+      - name: Release Please
+        id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # A release made with GITHUB_TOKEN does not start other workflows, so move the major tag here.
       - name: Move the major tag
+        if: steps.release.outputs.release_created == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
-          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          MAJOR: v${{ steps.release.outputs.major }}
+          SHA: ${{ steps.release.outputs.sha }}
         run: |
-          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::The tag $TAG is not a vX.Y.Z version."
-            exit 1
-          fi
-
-          major="${TAG%%.*}"
-          sha="$(gh api "repos/$REPO/commits/$TAG" --jq .sha)"
-
-          if gh api "repos/$REPO/git/ref/tags/$major" --silent 2>/dev/null; then
-            gh api --method PATCH "repos/$REPO/git/refs/tags/$major" -f sha="$sha" -F force=true --silent
+          if gh api "repos/$REPO/git/ref/tags/$MAJOR" --silent 2>/dev/null; then
+            gh api --method PATCH "repos/$REPO/git/refs/tags/$MAJOR" -f sha="$SHA" -F force=true --silent
           else
-            gh api --method POST "repos/$REPO/git/refs" -f ref="refs/tags/$major" -f sha="$sha" --silent
+            gh api --method POST "repos/$REPO/git/refs" -f ref="refs/tags/$MAJOR" -f sha="$SHA" --silent
           fi
 
-          echo "Moved $major to $TAG ($sha)."
+          echo "Moved $MAJOR to $SHA."
