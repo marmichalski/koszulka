@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   koszulka:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@v7
