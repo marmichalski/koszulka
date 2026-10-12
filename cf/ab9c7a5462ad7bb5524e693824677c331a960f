@@ -1,0 +1,23 @@
+.github/workflows/release.yml
+  s_0120e3b8157a6f::t_965b36069231b5 1-39
+package-lock.json
+  s_0120e3b8157a6f::t_92e5f1978391b2 3,9
+package.json
+  s_0120e3b8157a6f::t_e91af5481cf029 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cfab9c7a5462ad7bb5524e693824677c331a960f",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
