@@ -4,13 +4,20 @@ on:
   pull_request:
 
 permissions:
+  contents: read
   pull-requests: write
 
 jobs:
   koszulka:
     runs-on: ubuntu-22.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+          persist-credentials: false
+
       - name: Koszulka
-        uses: marmichalski/koszulka@master
+        uses: ./
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
