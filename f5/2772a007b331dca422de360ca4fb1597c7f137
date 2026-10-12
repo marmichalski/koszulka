@@ -1,0 +1,23 @@
+action.yml
+  s_0120e3b8157a6f::t_0e30013971a0af 43
+src/commenter.ts
+  s_0120e3b8157a6f::t_431b68e61d9ac3 6-25,34-58,62,64-65
+src/index.ts
+  s_0120e3b8157a6f::t_5457494e6761b3 18,20-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f52772a007b331dca422de360ca4fb1597c7f137",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "unknown"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
