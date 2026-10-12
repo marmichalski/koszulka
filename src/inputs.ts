@@ -4,7 +4,6 @@ const labelsSizesRaw = core.getMultilineInput("labelsSizes");
 
 export const inputs = {
   token: core.getInput("token", { required: true }),
-  name: core.getInput("name"),
   ignoreLineDeletions: core.getBooleanInput("ignoreLineDeletions"),
   ignoreFileRemovals: core.getBooleanInput("ignoreFileRemovals"),
   ignoreFiles: new Set(core.getMultilineInput("ignoreFiles")),

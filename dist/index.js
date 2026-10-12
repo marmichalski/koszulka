@@ -37290,7 +37290,6 @@ function getOctokit(token, options, ...additionalPlugins) {
 const labelsSizesRaw = getMultilineInput("labelsSizes");
 const inputs = {
     token: getInput("token", { required: true }),
-    name: getInput("name"),
     ignoreLineDeletions: getBooleanInput("ignoreLineDeletions"),
     ignoreFileRemovals: getBooleanInput("ignoreFileRemovals"),
     ignoreFiles: new Set(getMultilineInput("ignoreFiles")),
@@ -40028,7 +40027,7 @@ const updateLabels = async (diff) => {
 
 const commenter_octokit = getOctokit(inputs.token);
 // Hidden marker to find the comment of this action in later runs.
-const marker = `<!-- koszulka:${inputs.name} -->`;
+const marker = "<!-- koszulka -->";
 const findComment = async (issueNumber) => {
     const comments = await commenter_octokit.paginate(commenter_octokit.rest.issues.listComments, {
         ...github_context.repo,

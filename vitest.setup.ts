@@ -1,6 +1,5 @@
 // Default action inputs, same as in action.yml. The modules read the inputs when they are imported.
 process.env.INPUT_TOKEN = "token";
-process.env.INPUT_NAME = "koszulka";
 process.env.INPUT_IGNORELINEDELETIONS = "false";
 process.env.INPUT_IGNOREFILEREMOVALS = "false";
 process.env.INPUT_IGNOREFILES = "";

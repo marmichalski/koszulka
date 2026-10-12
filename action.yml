@@ -7,10 +7,6 @@ inputs:
   token:
     description: "GitHub token to use to interact with the GitHub API."
     required: true
-  name:
-    description: "The name the action uses to find its own pull request comment when it runs again."
-    required: false
-    default: "koszulka"
   ignoreLineDeletions:
     description: "Whether to ignore line deletions."
     required: false
