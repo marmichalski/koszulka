@@ -58,6 +58,15 @@ export const validateInputs = (): void => {
     );
   }
 
+  if (
+    inputs.commentOnLastSize &&
+    inputs.commentContentOnLastSize.trim() === ""
+  ) {
+    core.warning(
+      "commentOnLastSize is true, but commentContentOnLastSize is empty, so no comment will be posted.",
+    );
+  }
+
   if (errors.length > 0) {
     throw Error(`Invalid inputs:\n- ${errors.join("\n- ")}`);
   }

@@ -30482,6 +30482,10 @@ const validateInputs = () => {
         exports.inputs.labelsSizes.length !== exports.inputs.labels.length - 1) {
         errors.push(`labelsSizes must contain one value less than labels, got ${exports.inputs.labelsSizes.length} sizes for ${exports.inputs.labels.length} labels.`);
     }
+    if (exports.inputs.commentOnLastSize &&
+        exports.inputs.commentContentOnLastSize.trim() === "") {
+        core.warning("commentOnLastSize is true, but commentContentOnLastSize is empty, so no comment will be posted.");
+    }
     if (errors.length > 0) {
         throw Error(`Invalid inputs:\n- ${errors.join("\n- ")}`);
     }
