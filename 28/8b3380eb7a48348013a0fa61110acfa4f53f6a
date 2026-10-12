@@ -1,0 +1,29 @@
+.github/workflows/bundle-is-fresh.yml
+  s_0120e3b8157a6f::t_9fc3a5c5f0add4 17,20
+.github/workflows/lint.yml
+  s_0120e3b8157a6f::t_a21e4314388fcc 12,17
+.node-version
+  s_0120e3b8157a6f::t_f9c0403530b9a5 1
+action.yml
+  s_0120e3b8157a6f::t_9b4084a3516c13 56
+package-lock.json
+  s_0120e3b8157a6f::t_c5ec69325d0d7a 17,27,428-430,432,434,3732-3736
+package.json
+  s_0120e3b8157a6f::t_360e650145d521 9,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "288b3380eb7a48348013a0fa61110acfa4f53f6a",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
