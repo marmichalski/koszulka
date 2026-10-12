@@ -40,7 +40,7 @@ inputs:
       500
       1000
   commentOnLastSize:
-    description: "Should a comment be made when pull request is the biggest size."
+    description: "Should a comment be made when pull request is the biggest size. The comment is updated on later runs, and deleted when the pull request is no longer the biggest size."
     required: false
     default: false
   commentContentOnLastSize:

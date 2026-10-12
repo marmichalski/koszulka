@@ -15,12 +15,12 @@ const run = async (): Promise<void> => {
     const assignedLabel = await updateLabels(diff);
     Display.assignedLabel(assignedLabel);
 
-    if (inputs.labels.slice(-1).includes(assignedLabel)) {
-      comment();
+    const isLastSize = inputs.labels.slice(-1).includes(assignedLabel);
 
-      if (inputs.failOnLastSize) {
-        core.setFailed("Failed job due to PR size being too big.");
-      }
+    await comment(isLastSize);
+
+    if (isLastSize && inputs.failOnLastSize) {
+      core.setFailed("Failed job due to PR size being too big.");
     }
   } catch (error) {
     if (error instanceof Error) {
