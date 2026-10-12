@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: release
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Release Please
+        id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # A release made with GITHUB_TOKEN does not start other workflows, so move the major tag here.
+      - name: Move the major tag
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          MAJOR: v${{ steps.release.outputs.major }}
+          SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          if gh api "repos/$REPO/git/ref/tags/$MAJOR" --silent 2>/dev/null; then
+            gh api --method PATCH "repos/$REPO/git/refs/tags/$MAJOR" -f sha="$SHA" -F force=true --silent
+          else
+            gh api --method POST "repos/$REPO/git/refs" -f ref="refs/tags/$MAJOR" -f sha="$SHA" --silent
+          fi
+
+          echo "Moved $MAJOR to $SHA."
