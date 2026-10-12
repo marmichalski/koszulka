@@ -1,0 +1,43 @@
+package-lock.json
+  s_0120e3b8157a6f::t_889f4d7f15f632 12-14,18,25,34-37,39-40,44-47,49,53-56,58-74,78-81,84,88-91,364-367,369,373-376,378-384,387,391-394,396-397,400,404-407,409-411,414,418-421,424-427,429,432,435,439-442,445-448,450,454-457,459,462,465,469-472,475-478,480,484-487,489-494,497,501-504,506,509,513-516,518,881-883,887,1219-1225,1228-1231,1234-1236,1239-1242,1269-1281,1775-1780,2117-2120,2122,2125,2545,2564-2566,2568,2602-2605,2607,2611-2613,2618-2621
+package.json
+  s_0120e3b8157a6f::t_a5687886c6c864 5,20-22,26,33
+src/calculate-diff.test.ts
+  s_0120e3b8157a6f::t_8b289b49006a39 2,25
+src/calculate-diff.ts
+  s_0120e3b8157a6f::t_592bcc77cdafb3 2,4
+src/commenter.test.ts
+  s_0120e3b8157a6f::t_9794a58adb5fb6 2,32
+src/commenter.ts
+  s_0120e3b8157a6f::t_5c4ec97011b951 2
+src/display.ts
+  s_0120e3b8157a6f::t_c1603472e8a36d 1-2
+src/index.ts
+  s_0120e3b8157a6f::t_ca62bd42c8160d 1
+src/inputs.test.ts
+  s_0120e3b8157a6f::t_4dc725956e8ba9 2-7,12,17,21-24,105,116
+src/main.test.ts
+  s_0120e3b8157a6f::t_ad47e1a59e64e1 3-7,14-17
+src/main.ts
+  s_0120e3b8157a6f::t_15f7db62f357a5 2-6
+src/update-labels.test.ts
+  s_0120e3b8157a6f::t_647bdae30ac824 2
+src/update-labels.ts
+  s_0120e3b8157a6f::t_6b69630f8effc1 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3cf944782bcabff7d6fc4b747ed670575659a45e",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
