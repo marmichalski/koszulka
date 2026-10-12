@@ -1,0 +1,27 @@
+.github/workflows/release.yml
+  s_0120e3b8157a6f::t_c6815c1e342cce 4-9,13,16,19-25,27,31-32,34-35,37,40
+.release-please-manifest.json
+  s_0120e3b8157a6f::t_f71025deba69d1 1
+package-lock.json
+  s_0120e3b8157a6f::t_046dc76f1920b6 3,9
+package.json
+  s_0120e3b8157a6f::t_a09fe46bf5041c 3
+release-please-config.json
+  s_0120e3b8157a6f::t_fe09f20b529c82 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ac8d0e31a5406b996c126315948e0ddf07481272",
+  "prompts": {},
+  "sessions": {
+    "s_0120e3b8157a6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6743015-2577-4f9e-8c33-2373ecf0a18e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Marcin Michalski <evulmastah@gmail.com>"
+    }
+  }
+}
